@@ -1,4 +1,5 @@
-﻿using Pacco.Services.Availability.Core.Entities;
+﻿using Pacco.Services.Availability.Application.DTO;
+using Pacco.Services.Availability.Core.Entities;
 using Pacco.Services.Availability.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,18 @@ namespace Pacco.Services.Availability.Infrastructure.Mongo.Documents
                     Timestamp = r.DateTime.AsDaysSinceEpoch(),
                     Priority = r.Priority
                 })
+            };
+
+        public static ResourceDto AsDto(this ResourceDocument document)
+            => new ResourceDto
+            {
+                Id = document.Id,
+                Tags = document.Tags ?? Enumerable.Empty<string>(),
+                Reservations = document.Reservations?.Select(r => new ReservationDto
+                {
+                    Priority = r.Priority,
+                    DateTime = r.Timestamp.AsDateTime()
+                }) ?? Enumerable.Empty<ReservationDto>()
             };
 
         public static int AsDaysSinceEpoch(this DateTime dateTime) => (dateTime - new DateTime()).Days;
