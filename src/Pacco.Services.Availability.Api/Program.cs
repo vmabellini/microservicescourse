@@ -1,10 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Convey;
+using Convey.WebApi;
+using Convey.WebApi.CQRS;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Availability.Application;
+using Pacco.Services.Availability.Application.Commands;
+using Pacco.Services.Availability.Application.DTO;
+using Pacco.Services.Availability.Application.Queries;
 using Pacco.Services.Availability.Infrastructure.Mongo;
 
 namespace Pacco.Services.Availability.Api
@@ -20,9 +26,9 @@ namespace Pacco.Services.Availability.Api
             => WebHost.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                 {
-                    services.AddControllers().AddNewtonsoftJson();
                     services
                         .AddConvey()
+                        .AddWebApi()
                         .AddInfrastructure()
                         .AddApplication()
                         .Build();
@@ -30,8 +36,11 @@ namespace Pacco.Services.Availability.Api
                 .Configure(app =>
                 {
                     app.UseInfrastructure();
-                    app.UseRouting()
-                        .UseEndpoints(e => e.MapControllers());
+                    app.UseDispatcherEndpoints(endpoints => endpoints
+                        .Get<GetResource, ResourceDto>("resources/{resourceId}")
+                        .Get<GetResources, IEnumerable<ResourceDto>>("resources")
+                        .Post<AddResource>("resources", afterDispatch: (cmd, ctx) => ctx.Response.Created($"resources/{cmd.ResourceId}"))
+                    );
                 });
     }
 }
