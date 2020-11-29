@@ -11,7 +11,7 @@ namespace Pacco.Services.Availability.Infrastructure.Mongo.Documents
     internal static class Extensions
     {
         public static Resource AsEntity(this ResourceDocument document) =>
-            new Resource(document.Id, document.Tags, document.Reservations?.Select(r => new Reservation(r.Timestamp.AsDateTime(), r.Priority)));
+            new Resource(document.Id, document.Tags, document.Reservations?.Select(r => new Reservation(r.Timestamp.AsDateTime(), r.Priority)), document.Version);
 
         public static ResourceDocument AsDocument(this Resource entity) =>
             new ResourceDocument

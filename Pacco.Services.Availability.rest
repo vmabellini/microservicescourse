@@ -25,9 +25,8 @@ Content-Type: application/json
 
 {
   "resourceId": "{{resourceId}}",
-  "customerId": "{{customerId}}",
   "dateTime": "{{dateTime}}",
-  "priority": 0
+  "priority": 1
 }
 
 ###

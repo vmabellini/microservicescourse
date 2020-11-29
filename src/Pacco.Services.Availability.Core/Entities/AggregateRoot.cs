@@ -16,7 +16,7 @@ namespace Pacco.Services.Availability.Core.Entities
 
         protected void AddEvent(IDomainEvent @event)
         {
-            if (_events.Any())
+            if (!_events.Any())
             {
                 Version++;
             }
