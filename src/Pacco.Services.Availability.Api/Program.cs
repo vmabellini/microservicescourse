@@ -11,6 +11,7 @@ using Pacco.Services.Availability.Application;
 using Pacco.Services.Availability.Application.Commands;
 using Pacco.Services.Availability.Application.DTO;
 using Pacco.Services.Availability.Application.Queries;
+using Pacco.Services.Availability.Infrastructure;
 using Pacco.Services.Availability.Infrastructure.Mongo;
 
 namespace Pacco.Services.Availability.Api
